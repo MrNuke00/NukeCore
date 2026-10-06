@@ -1,0 +1,197 @@
+# =========================================================
+# NukeCore - .gitignore
+# =========================================================
+
+# ---------- Build output ----------
+/build/
+/build-*/
+/out/
+/out-*/
+/bin/
+/lib/
+/install/
+/_build/
+cmake-build-*/
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.pdb
+*.ilk
+*.exp
+*.idb
+*.gch
+*.pch
+
+# ---------- CMake ----------
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+compile_commands.json
+*.cmake.stamp
+!cmake/*.cmake
+!**/CMakeLists.txt
+
+# ---------- CMake presets user overrides ----------
+CMakeUserPresets.json
+
+# ---------- Visual Studio ----------
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+
+# ---------- VS Code ----------
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+
+# ---------- JetBrains / CLion ----------
+.idea/
+*.iws
+*.iml
+*.ipr
+cmake-build-*/
+
+# ---------- Xcode ----------
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+*.xcuserstate
+DerivedData/
+
+# ---------- Qt ----------
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qmlc
+*.jsc
+
+# ---------- Game engine / assets ----------
+# Compiled shaders
+*.spv
+*.glsl.spv
+*.hlsl.spv
+*.cso
+*.dxil
+*.metal.ar
+
+# Shader caches
+/shader_cache/
+*.shadercache
+
+# Compiled assets / cooked data
+/cooked/
+/Cooked/
+/assets-cooked/
+*.cooked
+*.pak
+*.nukepak
+
+# Asset import caches
+/import_cache/
+/Library/
+/Temp/
+/Obj/
+/Logs/
+/UserSettings/
+/Build/
+/Builds/
+
+# ---------- Logs / dumps ----------
+*.log
+*.dmp
+*.stackdump
+crash-*
+/core
+core.[0-9]*
+vgcore.*
+*.trace
+
+# ---------- Test / coverage ----------
+/Testing/
+*.gcda
+*.gcno
+*.gcov
+coverage/
+*.profraw
+*.profdata
+lcov.info
+
+# ---------- Benchmarks ----------
+*.bench.json
+
+# ---------- Dependencies (if vendored) ----------
+# Uncomment if you use FetchContent into a local dir:
+# /_deps/
+# /third_party/_deps/
+
+# ---------- Conan / vcpkg ----------
+conan.lock
+conanbuildinfo.*
+conaninfo.txt
+graph_info.json
+/vcpkg_installed/
+vcpkg-manifest-install.log
+
+# ---------- Env / secrets ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+
+# ---------- OS junk ----------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ---------- Editors ----------
+*.swp
+*.swo
+*.swn
+*~
+.*.swp
+*.kate-swp
+
