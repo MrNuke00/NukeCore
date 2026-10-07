@@ -1,4 +1,7 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿# NukeCore\CMakeLists.txt
+
+cmake_minimum_required (VERSION 3.20)
+
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
