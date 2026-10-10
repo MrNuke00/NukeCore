@@ -18,7 +18,7 @@ project ("NukeCore"
 include("cmake/Helpers.cmake")
 
 # ---- Options ----
-option(NUKECORE_BUILD_TESTS		"Build NukeCore tests"		ON)
+option(NUKECORE_BUILD_TESTS	"Build NukeCore tests" ON)
 
 # ---- Library ----
 NUKECORE_GET_CPP_SOURCES(SOURCES
@@ -33,7 +33,14 @@ add_library(Nuke::Core ALIAS NukeCore)
 
 target_compile_features(NukeCore PUBLIC cxx_std_20)
 
-# --- Detect platform (WIN32 → APPLE → UNIX, order matters!) ---
+# --- Visibility settings ---
+set_target_properties(NukeCore PROPERTIES
+    C_VISIBILITY_PRESET			hidden
+    CXX_VISIBILITY_PRESET		hidden
+    VISIBILITY_INLINES_HIDDEN	ON
+)
+
+# --- Detect platform ---
 if(WIN32)
     set(PLATFORM_NAME "Windows")
     set(PLATFORM_DEFINE PLATFORM_WINDOWS=1)
