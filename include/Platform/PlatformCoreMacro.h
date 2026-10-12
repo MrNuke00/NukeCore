@@ -5,13 +5,25 @@
 #include <climits>
 #include <type_traits>
 
+
+// MSVC historically reports __cplusplus as 199711L unless /Zc:__cplusplus is
+// passed. _MSVC_LANG is always accurate.
+#if defined(_MSVC_LANG)
+#  define CXX_STANDARD _MSVC_LANG
+#elif defined(__cplusplus)
+#  define CXX_STANDARD __cplusplus
+#endif
+
+#define CXX_STANDARD_11 (201103L)
+#define CXX_STANDARD_14 (201402L)
+#define CXX_STANDARD_17 (201703L)
+#define CXX_STANDARD_20 (202002L)
+#define CXX_STANDARD_23 (202302L)
+
 // This header relies on C++-only facilities (namespaces, `using`,
 // `static_assert`, `std::byte`, type traits). Refuse to be included from C.
-#if !defined(__cplusplus)
-#  error "PlatformCoreMacro.h requires a C++ compiler (C++11 or later)."
-#endif
-#if __cplusplus < 201103L && !(defined(_MSC_VER) && defined(_MSVC_LANG) && _MSVC_LANG >= 201103L)
-#  error "PlatformCoreMacro.h requires C++11 or later."
+#if !defined(CXX_STANDARD) || (CXX_STANDARD < CXX_STANDARD_17)
+#  error "PlatformCoreMacro.h requires a C++ compiler (C++17 or later)."
 #endif
 
 
@@ -86,8 +98,8 @@
 // Sanity check — the outer #else path plus the Apple refinement mean that at
 // least one platform flag must be set here.
 #if !PLATFORM_WINDOWS && !PLATFORM_MACOS && !PLATFORM_IOS && \
-    !PLATFORM_TVOS && !PLATFORM_WATCHOS && !PLATFORM_VISIONOS && \
-    !PLATFORM_LINUX && !PLATFORM_ANDROID && !PLATFORM_EMSCRIPTEN
+	!PLATFORM_TVOS && !PLATFORM_WATCHOS && !PLATFORM_VISIONOS && \
+	!PLATFORM_LINUX && !PLATFORM_ANDROID && !PLATFORM_EMSCRIPTEN
 #  error "PlatformCoreMacro.h: Unsupported or undetected target operating system."
 #endif
 
@@ -98,7 +110,7 @@
 #endif
 
 #if PLATFORM_IOS || PLATFORM_ANDROID || PLATFORM_TVOS || \
-    PLATFORM_WATCHOS || PLATFORM_VISIONOS
+	PLATFORM_WATCHOS || PLATFORM_VISIONOS
 #  define PLATFORM_MOBILE 1
 #else
 #  define PLATFORM_MOBILE 0
@@ -141,20 +153,7 @@
 // =============================================================================
 // 3. Language standard
 // =============================================================================
-//
-// MSVC historically reports __cplusplus as 199711L unless /Zc:__cplusplus is
-// passed. _MSVC_LANG is always accurate.
-#if defined(_MSVC_LANG)
-#  define CXX_STANDARD _MSVC_LANG
-#else
-#  define CXX_STANDARD __cplusplus
-#endif
 
-#define CXX_STANDARD_11 (201103L)
-#define CXX_STANDARD_14 (201402L)
-#define CXX_STANDARD_17 (201703L)
-#define CXX_STANDARD_20 (202002L)
-#define CXX_STANDARD_23 (202302L)
 
 #if CXX_STANDARD >= CXX_STANDARD_17
 #  define HAS_CPP17 1
@@ -247,7 +246,7 @@
 #endif
 
 #if ARCH_X86_64 || ARCH_ARM64 || ARCH_RISCV64 || \
-    (defined(__LP64__) || defined(_LP64) || defined(_WIN64))
+	(defined(__LP64__) || defined(_LP64) || defined(_WIN64))
 #  define ARCH_64BIT 1
 #else
 #  define ARCH_64BIT 0
@@ -263,7 +262,7 @@
 #  define ENDIAN_BIG 0
 #  define ENDIAN_LITTLE 1
 #elif ARCH_X86_64 || ARCH_X86_32 || ARCH_ARM64 || ARCH_ARM32 || ARCH_WASM || \
-      ARCH_RISCV64 || ARCH_RISCV32
+	  ARCH_RISCV64 || ARCH_RISCV32
 #  define ENDIAN_BIG 0
 #  define ENDIAN_LITTLE 1
 #else
@@ -317,7 +316,7 @@
 #endif
 
 #if defined(__ARM_NEON) || defined(__ARM_NEON__) || \
-    defined(_M_ARM) || defined(_M_ARM64) || defined(_M_ARM64EC)
+	defined(_M_ARM) || defined(_M_ARM64) || defined(_M_ARM64EC)
 #  define SIMD_NEON 1
 #else
 #  define SIMD_NEON 0
@@ -510,17 +509,17 @@
 #if COMPILER_MSVC
 #  define DO_PRAGMA_IMPL(x) __pragma(x)
 #  define PRAGMA_MESSAGE(msg) \
-       __pragma(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
+	   __pragma(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
 #  define COMPILE_ERROR(msg) \
-       __pragma(message(__FILE__ "(" STRINGIZE(__LINE__) "): error: " msg))
+	   __pragma(message(__FILE__ "(" STRINGIZE(__LINE__) "): error: " msg))
 #elif COMPILER_GCC || COMPILER_CLANG
    // _Pragma requires a single string literal. DO_PRAGMA expands and then
    // stringizes whatever it is given, which is what we want here.
 #  define DO_PRAGMA_IMPL(x) _Pragma(#x)
 #  define PRAGMA_MESSAGE(msg) \
-       DO_PRAGMA_IMPL(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
+	   DO_PRAGMA_IMPL(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
 #  define COMPILE_ERROR(msg) \
-       DO_PRAGMA_IMPL(GCC error msg)
+	   DO_PRAGMA_IMPL(GCC error msg)
 #else
 #  define DO_PRAGMA_IMPL(x)
 #  define PRAGMA_MESSAGE(msg)
@@ -539,12 +538,12 @@
 #define OFFSET_OF(type, member) offsetof(type, member)
 
 #define CONTAINER_OF(ptr, type, member) \
-    ((type*)((char*)(ptr) - OFFSET_OF(type, member)))
+	((type*)((char*)(ptr) - OFFSET_OF(type, member)))
 
 #define TYPE_OF(e)      decltype(e)
 #define SAME_TYPE(a, b) std::is_same< \
-                            typename std::remove_cv<a>::type, \
-                            typename std::remove_cv<b>::type>::value
+							typename std::remove_cv<a>::type, \
+							typename std::remove_cv<b>::type>::value
 
 
 // =============================================================================
@@ -730,7 +729,7 @@ enum class byte : unsigned char {};
 
 static_assert(sizeof(float32) == 4, "f32 must be exactly 32 bits.");
 static_assert(sizeof(float64) == 8, "f64 must be exactly 64 bits.");
-static_assert(sizeof(int8) == 1 && sizeof(uint8) == 1, "8-bit type size mismatch.");
+static_assert(sizeof(int8)  == 1 && sizeof(uint8)  == 1, "8-bit type size mismatch.");
 static_assert(sizeof(int16) == 2 && sizeof(uint16) == 2, "16-bit type size mismatch.");
 static_assert(sizeof(int32) == 4 && sizeof(uint32) == 4, "32-bit type size mismatch.");
 static_assert(sizeof(int64) == 8 && sizeof(uint64) == 8, "64-bit type size mismatch.");
@@ -783,9 +782,9 @@ using wchar = wchar_t;
 #elif COMPILER_MSVC
    // Fallback for very old MSVC without /std:c++11 or later.
 #  define STATIC_ASSERT(cond, msg) \
-       typedef char CONCAT(static_assert_, __LINE__)[(cond) ? 1 : -1]
+	   typedef char CONCAT(static_assert_, __LINE__)[(cond) ? 1 : -1]
 #else
 #  define STATIC_ASSERT(cond, msg) \
-       typedef char CONCAT(static_assert_, __LINE__)[(cond) ? 1 : -1]
+	   typedef char CONCAT(static_assert_, __LINE__)[(cond) ? 1 : -1]
 #endif
 

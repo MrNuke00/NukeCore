@@ -1,25 +1,25 @@
 #pragma once
 #include <Platform/PlatformCore.h>
 
+namespace Platform::Process {
+
+	enum eResult : int32
+	{
+		PLATFORM_RESULT(PLATFORM_PROCESS_RESULT_BIT),
+
+	};
+
+};
+
+/*
+
 #define PLATFORM_PROCESS_API API_DECL
 #define PLATFORM_SHARED_MEMORY_API API_DECL
 
 /// @brief Wrapper handle for platform process resources.
 DEFINE_HANDLE(Process); // ProcessHandle
 
-namespace eResult {
-	enum : iResult
-	{
-		PlatformProcessResult = PLATFORM_PROCESS_RESULT_BIT,
-		Timeout,
-		NotFound,
-		AccessDenied,
-		InvalidHandle,
-		StillRunning,
-		AlreadyExists,
-		NotSupported,
-	};
-};
+
 
 /// @brief Parameters used to launch a new process.
 struct ProcessCreateInfo
@@ -135,6 +135,8 @@ public:
 	static void Close(SharedMemoryHandle handle, void* mappedPtr);
 
 };
+
+*/
 
 
 

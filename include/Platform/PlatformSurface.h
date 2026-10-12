@@ -1,26 +1,25 @@
 #pragma once
 #include <Platform/PlatformCore.h>
-#include <Platform/PlatformInput.h>
+// #include <Platform/PlatformInput.h> // Platform
+
+namespace Platform::Surface {
+
+	enum eResult : int32
+	{
+		PLATFORM_RESULT(PLATFORM_SURFACE_RESULT_BIT),
+
+	};
+
+};
 
 
-#define PLATFORM_SURFACE_API API_DECL
+/*
+
 
 DEFINE_HANDLE(Surface);
 DEFINE_HANDLE(CursorShape);
 DEFINE_HANDLE(IconShape);
 
-namespace eResult {
-	enum : iResult
-	{
-		PlatformSurfaceResult = PLATFORM_SURFACE_RESULT_BIT,
-		SurfaceInitFailed,
-		SurfaceClassRegistrationFailed,
-		SurfaceCreationFailed,
-		SurfaceAlreadyInitialized,
-		CursorCreationFailed,
-		IconCreationFailed
-	};
-};
 
 enum class eSurfaceLifecycle : uint32
 {
@@ -141,13 +140,13 @@ public:
 	static void Fini();
 
 #if PLATFORM_DISKTOP_MANAGER
-	
+
 	static iResult Create(const SurfaceCreateInfo& info, SurfaceHandle& outSurface);
 
 	static iResult Destroy(SurfaceHandle& hSurface);
 
 #else
-	
+
 	static iResult GetNativeSurface(SurfaceHandle& outSurface);
 
 #endif
@@ -165,7 +164,7 @@ public:
 	static iResult GetSurfaceMode(SurfaceHandle hSurface, eSurfaceMode& Mode);
 
 	static iResult SetSize(SurfaceHandle hSurface, uint32 Width	, uint32 Height);
-	
+
 	static iResult GetSize(SurfaceHandle hSurface, uint32& Width, uint32& Height);
 
 	static void GetMaximumDeviceSize(uint32& Width, uint32& Height);
@@ -223,3 +222,7 @@ public:
 #endif
 
 };
+
+*/
+
+

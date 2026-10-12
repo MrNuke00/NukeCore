@@ -1,8 +1,11 @@
 // PlatformCore.h
 #pragma once
 #include <Platform/PlatformCoreMacro.h>
-
 #include <Platform/PlatformMacro.h>
+
+
+
+
 
 #define DEFINE_HANDLE(NAME)												\
 	struct NAME##Handle {												\
@@ -23,23 +26,9 @@
 
 
 
-using iResult = int32;
 
-/**
- * eResult < 0	: Error
- * eResult == 0	: OK
- * eResult > 0	: Warning | Info
- */
-namespace eResult
-{
-	enum : iResult
-	{
-		OK				= 0,
-		Error			= 1,
-		UnvalidHandle	= 2,
-		Unknown	= INT32_MIN
-	};
-}
+
+
 
 
 #define PLATFORM_XX_RESULT_BIT			(0xFF0000)
@@ -52,11 +41,22 @@ namespace eResult
 #define PLATFORM_AUDIO_RESULT_BIT		(0x860000)
 
 
+#define PLATFORM_START_API(NAME)\
+	struct Platform##NAME {\
+		Platform##NAME() = delete;\
+	public:
 
 
+#define PLATFORM_END_API(NAME) }
 
 
-
+#define PLATFORM_RESULT(C,...)	\
+	OK = 0,						\
+	Error = 1,					\
+	UnvalidHandle = 2,			\
+	Unknown = INT32_MIN,		\
+	__ = C,						\
+	__VA_ARGS__					\
 
 
 

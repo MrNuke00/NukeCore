@@ -1,7 +1,18 @@
 ﻿#pragma once
 #include <Platform/PlatformCore.h>
 
-#define PLATFORM_NETWORK_API API_DECL
+namespace Platform::Network {
+
+    enum eResult : int32
+    {
+        PLATFORM_RESULT(PLATFORM_NETWORK_RESULT_BIT),
+
+    };
+
+};
+
+
+/*
 
 /// @brief Wrapper handle for platform socket resources.
 DEFINE_HANDLE(Socket); // SocketHandle
@@ -9,34 +20,18 @@ DEFINE_HANDLE(Socket); // SocketHandle
 /// @brief Defines the address family for the socket.
 enum class eAddressFamily
 {
-	IPv4,
-	IPv6
+    IPv4,
+    IPv6
 };
 
 /// @brief Defines the protocol type for the socket.
 enum class eSocketType
 {
-	TCP,
-	UDP
+    TCP,
+    UDP
 };
 
-namespace eResult {
-    enum : iResult
-    {
-        PlatformNetworkResult = PLATFORM_NETWORK_RESULT_BIT,
-        WouldBlock,
-        ConnectionRefused,
-        ConnectionClosed,
-        ConnectionReset,
-        Timeout,
-        AddressInUse,
-        HostNotFound,
-        InvalidAddress,
-        InvalidHandle,
-        NetworkUnreachable,
-        NotSupported,
-    };
-};
+
 
 struct PLATFORM_NETWORK_API PlatformNetwork
 {
@@ -99,4 +94,4 @@ public:
     /// @param isNonBlocking True to enable non-blocking mode, false for blocking.
     static iResult SetNonBlocking(SocketHandle socket, bool isNonBlocking);
 };
-
+*/

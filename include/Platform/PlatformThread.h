@@ -1,27 +1,24 @@
 #pragma once
 #include <Platform/PlatformCore.h>
 
-#define PLATFORM_THREAD_API API_DECL
-#define PLATFORM_SYNCH_API  API_DECL
-#define PLATFORM_ATOMIC_API API_DECL
+
+namespace Platform::Thread {
+
+	enum eResult : int32
+	{
+		PLATFORM_RESULT(PLATFORM_THREAD_RESULT_BIT),
+
+	};
+
+};
+
+/*
 
 
 /// @brief Wrapper handles for threading and synchronization resources.
 DEFINE_HANDLE(Thread);             // ThreadHandle
 
-namespace eResult {
-	enum : iResult
-	{
-		PlatformThreadResult = PLATFORM_THREAD_RESULT_BIT,
-		Timeout,
-		NotFound,
-		AccessDenied,
-		InvalidHandle,
-		AlreadyExists,
-		NotSupported,
-		DeadlockDetected,
-	};
-};
+
 
 /// @brief Thread priority levels mapped to underlying OS schedulers.
 enum class eThreadPriority : int32
@@ -167,7 +164,7 @@ public:
 	// -------------------------------------------------------------------------
 	// 32-bit Integer Atomics
 	// -------------------------------------------------------------------------
-	
+
 	static int32	Load32(const volatile int32* destination, eMemoryOrder order = eMemoryOrder::SeqCst);
 	static void		Store32(volatile int32* destination, int32 value, eMemoryOrder order = eMemoryOrder::SeqCst);
 
@@ -182,7 +179,7 @@ public:
 	// -------------------------------------------------------------------------
 	// 64-bit Integer Atomics
 	// -------------------------------------------------------------------------
-	
+
 	static int64	Load64(const volatile int64* destination, eMemoryOrder order = eMemoryOrder::SeqCst);
 	static void		Store64(volatile int64* destination, int64 value, eMemoryOrder order = eMemoryOrder::SeqCst);
 
@@ -192,3 +189,6 @@ public:
 	static int64	FetchAdd64(volatile int64* destination, int64 operand, eMemoryOrder order = eMemoryOrder::SeqCst);
 	static int64	FetchSub64(volatile int64* destination, int64 operand, eMemoryOrder order = eMemoryOrder::SeqCst);
 };
+
+*/
+

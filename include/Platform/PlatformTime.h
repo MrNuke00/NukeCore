@@ -1,8 +1,7 @@
 #pragma once
 #include <Platform/PlatformCore.h>
 
-#define PLATFORM_TIME_API API_DECL
-
+/*
 
 /// @brief Represents a broken-down calendar date and clock time snapshot.
 struct DateTime
@@ -57,7 +56,7 @@ public:
 	static float64 GetSeconds();
 
 	/// @brief Calculates elapsed absolute system time in milliseconds since system startup.
-	/// @details Logic: Multiplies current cycles by 1000.0 before dividing by frequency to retain 
+	/// @details Logic: Multiplies current cycles by 1000.0 before dividing by frequency to retain
 	///          floating-point precision without premature truncation.
 	/// @return Absolute high-precision time in milliseconds (double).
 	static float64 GetMilliseconds();
@@ -81,4 +80,5 @@ public:
 
 };
 
+*/
 

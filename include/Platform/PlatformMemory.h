@@ -1,9 +1,9 @@
 #pragma once
 #include <Platform/PlatformCore.h>
 
-#define PLATFORM_MEMORY_API API_DECL
+/*
 
-struct PLATFORM_MEMORY_API PlatformMemory
+struct PlatformMemory
 {
     PlatformMemory() = delete;
 
@@ -83,3 +83,5 @@ public:
     /// @return 0 if both memory blocks are identical, or 1 if they differ.
     static int32 Compare(const void* ptr1, const void* ptr2, uint64 size);
 };
+
+*/
