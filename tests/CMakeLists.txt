@@ -1,13 +1,12 @@
 # NukeCore\tests\CMakeLists.txt
 
-add_executable(NukeCoreTests
-	"PlatformFile/main.cpp"
-)
+enable_testing()
 
-target_link_libraries(NukeCoreTests
-PRIVATE
-	NukeCore
-)
+add_executable(PlatformFileTests "PlatformFile/main.cpp")
+target_link_libraries(PlatformFileTests PRIVATE NukeCore)
+add_test(NAME PlatformFileTests COMMAND PlatformFileTests)
 
 
-
+add_executable(PlatformMemoryTests "PlatformMemory/main.cpp")
+target_link_libraries(PlatformMemoryTests PRIVATE NukeCore)
+add_test(NAME PlatformMemoryTests COMMAND PlatformMemoryTests)

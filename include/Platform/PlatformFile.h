@@ -2,7 +2,8 @@
 #include <Platform/PlatformCore.h>
 
 // PlatformFile
-namespace Platform::File {
+namespace Platform::File
+{
 
 	enum eResult : int32
 	{
@@ -22,10 +23,10 @@ namespace Platform::File {
 	// File Open Modes (Prefixed to avoid colliding with Read/Write functions)
 	enum eFileMode : uint32
 	{
-		FileModeRead = 1		<< 0,
-		FileModeWrite = 1		<< 1,
-		FileModeAppend = 1		<< 2,
-		FileModeCreateNew = 1	<< 3
+		FileModeRead		= 1	<< 0,
+		FileModeWrite		= 1	<< 1,
+		FileModeAppend		= 1	<< 2,
+		FileModeCreateNew	= 1	<< 3
 	};
 
 	// Mode changed to uint32 to support bitwise flag combinations (e.g., Read | Write)
@@ -39,9 +40,9 @@ namespace Platform::File {
 
 	enum eSeekOrigin : int32
 	{
-		Begin = 0, // From the start of the file
-		Current = 1, // From the current file position
-		End = 2  // From the end of the file
+		Begin	= 0,	// From the start of the file
+		Current	= 1,	// From the current file position
+		End		= 2		// From the end of the file
 	};
 
 	int32 Seek(FileHandle hFile, int64 Offset, const eSeekOrigin Origin, uint64* pPosition = nullptr);
