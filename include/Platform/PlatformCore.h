@@ -3,31 +3,22 @@
 #include <Platform/PlatformCoreMacro.h>
 #include <Platform/PlatformMacro.h>
 
-
-
-
-
-#define DEFINE_HANDLE(NAME)												\
-	struct NAME##Handle {												\
-		void* ptr = nullptr;											\
-		using THandle = NAME##Handle;									\
-		/* Allow: if (handle) */										\
-		constexpr explicit operator bool() const {						\
-			return ptr != nullptr;										\
-		}																\
-		/* Allow: if (handle1 == handle2) */							\
-		constexpr bool operator==(const THandle& other) const {			\
-			return ptr == other.ptr;									\
-		}																\
-		constexpr bool operator!=(const THandle& other) const {			\
-			return ptr != other.ptr;									\
-		}																\
+#define DEFINE_HANDLE(NAME)										\
+	struct NAME##Handle {										\
+		void* ptr = nullptr;									\
+		using THandle = NAME##Handle;							\
+		/* Allow: if (handle) */								\
+		constexpr explicit operator bool() const {				\
+			return ptr != nullptr;								\
+		}														\
+		/* Allow: if (handle1 == handle2) */					\
+		constexpr bool operator==(const THandle& other) const {	\
+			return ptr == other.ptr;							\
+		}														\
+		constexpr bool operator!=(const THandle& other) const {	\
+			return ptr != other.ptr;							\
+		}														\
 	}
-
-
-
-
-
 
 
 
@@ -50,13 +41,12 @@
 #define PLATFORM_END_API(NAME) }
 
 
-#define PLATFORM_RESULT(C,...)	\
+#define PLATFORM_RESULT(C)	\
 	OK = 0,						\
 	Error = 1,					\
 	UnvalidHandle = 2,			\
 	Unknown = INT32_MIN,		\
-	__ = C,						\
-	__VA_ARGS__					\
+	__ = C						\
 
 
 

@@ -14,9 +14,9 @@ namespace Platform::Audio {
 	DEFINE_HANDLE(SoundBuffer);     // SoundBufferHandle : Row Data of Sound 
 	DEFINE_HANDLE(SoundSource);     // SoundSourceHandle : Control of Sound
 
-	static int32	Init();
+	int32	Init();
 
-	static void		Fini();
+	void	Fini();
 
 
 	struct AudioDeviceCreateInfo
@@ -24,9 +24,9 @@ namespace Platform::Audio {
 		// ...
 	};
 
-	static int32 CreateDevice(const AudioDeviceCreateInfo& CreateInfo, AudioDeviceHandle& hDevice);
+	int32 CreateDevice(const AudioDeviceCreateInfo& CreateInfo, AudioDeviceHandle& hDevice);
 
-	static void DestroyDevice(AudioDeviceHandle hDevice);
+	void DestroyDevice(AudioDeviceHandle hDevice);
 
 
 	struct SoundBufferCreateInfo
@@ -34,15 +34,15 @@ namespace Platform::Audio {
 		//...
 	};
 
-	static int32 CreateBuffer(const SoundBufferCreateInfo& CreateInfo, SoundBufferHandle& hBuffer);
+	int32 CreateBuffer(const SoundBufferCreateInfo& CreateInfo, SoundBufferHandle& hBuffer);
 
-	static void DestroyBuffer(SoundBufferHandle hBuffer);
+	void DestroyBuffer(SoundBufferHandle hBuffer);
 
 
 
-	static int32 CreateSource(SoundBufferHandle hBuffer, SoundSourceHandle& hSource);
+	int32 CreateSource(SoundBufferHandle hBuffer, SoundSourceHandle& hSource);
 
-	static void DestroySource(SoundSourceHandle hSource);
+	void DestroySource(SoundSourceHandle hSource);
 
 	// -- Control functions for SoundSource
 

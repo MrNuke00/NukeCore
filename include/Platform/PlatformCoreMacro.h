@@ -507,27 +507,21 @@
 // them inside a runtime `if`. Use STATIC_ASSERT for conditional compile-time
 // checks.
 #if COMPILER_MSVC
-#  define DO_PRAGMA_IMPL(x) __pragma(x)
-#  define PRAGMA_MESSAGE(msg) \
-	   __pragma(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
-#  define COMPILE_ERROR(msg) \
-	   __pragma(message(__FILE__ "(" STRINGIZE(__LINE__) "): error: " msg))
+#  define DO_PRAGMA_IMPL(x)		__pragma(x)
 #elif COMPILER_GCC || COMPILER_CLANG
-   // _Pragma requires a single string literal. DO_PRAGMA expands and then
-   // stringizes whatever it is given, which is what we want here.
-#  define DO_PRAGMA_IMPL(x) _Pragma(#x)
-#  define PRAGMA_MESSAGE(msg) \
-	   DO_PRAGMA_IMPL(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
-#  define COMPILE_ERROR(msg) \
-	   DO_PRAGMA_IMPL(GCC error msg)
+#  define DO_PRAGMA_IMPL(x)		_Pragma(#x)
 #else
 #  define DO_PRAGMA_IMPL(x)
-#  define PRAGMA_MESSAGE(msg)
-#  define COMPILE_ERROR(msg)
 #endif
 
-#define COMPILE_NOTE(msg) PRAGMA_MESSAGE("note: "    msg)
-#define COMPILE_WARN(msg) PRAGMA_MESSAGE("warning: " msg)
+#if COMPILER_MSVC || COMPILER_GCC || COMPILER_CLANG
+#  define PRAGMA_MESSAGE(msg)	DO_PRAGMA_IMPL(message(__FILE__ "(" STRINGIZE(__LINE__) "): " msg))
+#  define PRAGMA_ERROR(msg)		DO_PRAGMA_IMPL(message(__FILE__ "(" STRINGIZE(__LINE__) "): error: " msg))
+#else
+#  define PRAGMA_MESSAGE(msg)
+#  define PRAGMA_ERROR(msg)
+#endif
+
 
 
 // =============================================================================
@@ -603,7 +597,7 @@
 #  define CONSTEXPR20 constexpr
 #  define CONSTEVAL   constexpr
 #  define CONSTINIT   constexpr
-#elif CXX_STANDARD >= 201402L
+#elif CXX_STANDARD >= CXX_STANDARD_14
 #  define CONSTEXPR20 inline
 #  define CONSTEVAL   inline
 #  define CONSTINIT
@@ -722,7 +716,7 @@ using uptr = std::uintptr_t;
 using iptr = std::intptr_t;
 
 #if HAS_CPP17
-using byte = std::byte;
+using byte = unsigned char;
 #else
 enum class byte : unsigned char {};
 #endif
