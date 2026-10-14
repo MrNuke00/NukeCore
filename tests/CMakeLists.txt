@@ -6,7 +6,11 @@ add_executable(PlatformFileTests "PlatformFile/main.cpp")
 target_link_libraries(PlatformFileTests PRIVATE NukeCore)
 add_test(NAME PlatformFileTests COMMAND PlatformFileTests)
 
-
 add_executable(PlatformMemoryTests "PlatformMemory/main.cpp")
 target_link_libraries(PlatformMemoryTests PRIVATE NukeCore)
 add_test(NAME PlatformMemoryTests COMMAND PlatformMemoryTests)
+
+add_executable(PlatformTimeTests "PlatformTime/main.cpp")
+target_link_libraries(PlatformTimeTests PRIVATE NukeCore)
+add_test(NAME PlatformTimeTests COMMAND PlatformTimeTests)
+
