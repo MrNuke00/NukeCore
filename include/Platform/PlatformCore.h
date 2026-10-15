@@ -45,6 +45,7 @@
 	OK = 0,						\
 	Error = 1,					\
 	UnvalidHandle = 2,			\
+	InvalidArgument = 3,		\
 	Unknown = INT32_MIN,		\
 	__ = C						\
 

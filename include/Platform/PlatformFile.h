@@ -8,13 +8,13 @@ namespace Platform::File
 	enum eResult : int32
 	{
 		PLATFORM_RESULT(PLATFORM_FILE_RESULT_BIT),
-		FileNotFound = 3,
-		FileAlreadyExists = 4,
-		AccessDenied = 5,
-		SharingViolation = 6,
-		InvalidParameter = 7,
-		EndOfFile = 8,
-		DiskFull = 9
+		FileNotFound,
+		FileAlreadyExists,
+		AccessDenied,
+		SharingViolation,
+		InvalidParameter,
+		EndOfFile,
+		DiskFull
 	};
 
 	DEFINE_HANDLE(File);    // FileHandle

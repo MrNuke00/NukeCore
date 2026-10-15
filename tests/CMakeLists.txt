@@ -14,3 +14,6 @@ add_executable(PlatformTimeTests "PlatformTime/main.cpp")
 target_link_libraries(PlatformTimeTests PRIVATE NukeCore)
 add_test(NAME PlatformTimeTests COMMAND PlatformTimeTests)
 
+add_executable(PlatformThreadTests "PlatformThread/main.cpp")
+target_link_libraries(PlatformThreadTests PRIVATE NukeCore)
+add_test(NAME PlatformThreadTests COMMAND PlatformThreadTests)
