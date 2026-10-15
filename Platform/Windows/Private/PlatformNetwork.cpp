@@ -44,11 +44,11 @@ namespace Platform::Network
         ::WSACleanup();
     }
 
-    int32 CreateSocket(SocketHandle& outSocket, eAddressFamily family, eSocketType type)
+    int32 CreateSocket(SocketHandle& hSocket, eAddressFamily Family, eSocketType Type)
     {
-        int af = (family == eAddressFamily::IPv6) ? AF_INET6 : AF_INET;
-        int sockType = (type == eSocketType::UDP) ? SOCK_DGRAM : SOCK_STREAM;
-        int protocol = (type == eSocketType::UDP) ? IPPROTO_UDP : IPPROTO_TCP;
+        int af = (Family == eAddressFamily::IPv6) ? AF_INET6 : AF_INET;
+        int sockType = (Type == eSocketType::UDP) ? SOCK_DGRAM : SOCK_STREAM;
+        int protocol = (Type == eSocketType::UDP) ? IPPROTO_UDP : IPPROTO_TCP;
 
         SOCKET s = ::socket(af, sockType, protocol);
         if (s == INVALID_SOCKET)
@@ -56,13 +56,13 @@ namespace Platform::Network
             return TranslateError();
         }
 
-        outSocket.ptr = reinterpret_cast<void*>(s);
+        hSocket.ptr = reinterpret_cast<void*>(s);
         return eResult::OK;
     }
 
-    int32 CloseSocket(SocketHandle socket)
+    int32 CloseSocket(SocketHandle hSocket)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET || s == 0)
         {
             return eResult::UnvalidHandle;
@@ -76,9 +76,9 @@ namespace Platform::Network
         return eResult::OK;
     }
 
-    int32 Bind(SocketHandle socket, const char* address, uint16 port)
+    int32 Bind(SocketHandle hSocket, const char* address, uint16 port)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
 
         sockaddr_in addr{};
@@ -105,9 +105,9 @@ namespace Platform::Network
         return eResult::OK;
     }
 
-    int32 Listen(SocketHandle socket, int32 backlog)
+    int32 Listen(SocketHandle hSocket, int32 backlog)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
 
         if (::listen(s, backlog) == SOCKET_ERROR)
@@ -118,9 +118,9 @@ namespace Platform::Network
         return eResult::OK;
     }
 
-    int32 Accept(SocketHandle listenSocket, SocketHandle& outClientSocket)
+    int32 Accept(SocketHandle hListenSocket, SocketHandle& hClientSocket)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(listenSocket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hListenSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
 
         sockaddr_in clientAddr{};
@@ -132,13 +132,13 @@ namespace Platform::Network
             return TranslateError();
         }
 
-        outClientSocket.ptr = reinterpret_cast<void*>(clientSock);
+        hClientSocket.ptr = reinterpret_cast<void*>(clientSock);
         return eResult::OK;
     }
 
-    int32 Connect(SocketHandle socket, const char* address, uint16 port)
+    int32 Connect(SocketHandle hSocket, const char* address, uint16 port)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
         if (!address) return eResult::InvalidArgument;
 
@@ -159,9 +159,9 @@ namespace Platform::Network
         return eResult::OK;
     }
 
-    int32 Send(SocketHandle socket, const void* data, uint32 size, uint32* outBytesSent)
+    int32 Send(SocketHandle hSocket, const void* data, uint32 size, uint32* outBytesSent)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
         if (!data) return eResult::InvalidArgument;
 
@@ -179,9 +179,9 @@ namespace Platform::Network
         return eResult::OK;
     }
 
-    int32 Receive(SocketHandle socket, void* buffer, uint32 size, uint32* outBytesReceived)
+    int32 Receive(SocketHandle hSocket, void* buffer, uint32 size, uint32* outBytesReceived)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
         if (!buffer) return eResult::InvalidArgument;
 
@@ -203,9 +203,9 @@ namespace Platform::Network
         return eResult::OK;
     }
 
-    int32 SetNonBlocking(SocketHandle socket, bool isNonBlocking)
+    int32 SetNonBlocking(SocketHandle hSocket, bool isNonBlocking)
     {
-        SOCKET s = reinterpret_cast<SOCKET>(socket.ptr);
+        SOCKET s = reinterpret_cast<SOCKET>(hSocket.ptr);
         if (s == INVALID_SOCKET) return eResult::UnvalidHandle;
 
         u_long mode = isNonBlocking ? 1 : 0;

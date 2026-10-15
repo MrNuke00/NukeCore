@@ -1,142 +1,61 @@
 #pragma once
 #include <Platform/PlatformCore.h>
 
-namespace Platform::Process {
-
-	enum eResult : int32
-	{
-		PLATFORM_RESULT(PLATFORM_PROCESS_RESULT_BIT),
-
-	};
-
-};
-
-/*
-
-#define PLATFORM_PROCESS_API API_DECL
-#define PLATFORM_SHARED_MEMORY_API API_DECL
-
-/// @brief Wrapper handle for platform process resources.
-DEFINE_HANDLE(Process); // ProcessHandle
-
-
-
-/// @brief Parameters used to launch a new process.
-struct ProcessCreateInfo
+namespace Platform::Process
 {
-	const char* executablePath = nullptr; // Full or relative path to executable
-	const char* arguments      = nullptr; // Null-terminated command line arguments
-	const char* workingDir     = nullptr; // Working directory (nullptr for current working dir)
-	uint32_t    flags          = 0;       // Bitwise combination of eProcessFlags
-};
+    enum eResult : int32
+    {
+        PLATFORM_RESULT(PLATFORM_PROCESS_RESULT_BIT),
+        ProcessNotFound,
+        AccessDenied,
+        Timeout,
+        AlreadyExists,
+        NotSupported,
+        ConnectionClosed
+    };
 
-/// @brief Creation flags for configuring process behavior.
-enum class eProcessFlags : uint32_t
-{
-	None            = 0,
-	Detached        = 1 << 0, // Run independently without child job binding
-	Hidden          = 1 << 1, // Do not open or display a visible window/console
-	CreateSuspended = 1 << 2  // Create process in a suspended state
-};
+    // Standard engine handle macros
+    DEFINE_HANDLE(Process);
+    DEFINE_HANDLE(SharedMemory);
 
-struct PLATFORM_PROCESS_API PlatformProcess
-{
-	PlatformProcess() = delete;
-public:
+    enum class eProcessFlags : uint32
+    {
+        None = 0,
+        Detached = 1 << 0,
+        Hidden = 1 << 1,
+        CreateSuspended = 1 << 2
+    };
 
-	static iResult Init();
-	static void Fini();
+    struct ProcessCreateInfo
+    {
+        const char* executablePath = nullptr;
+        const char* arguments = nullptr;
+        const char* workingDir = nullptr;
+        uint32      flags = 0;
+        bool        redirectStreams = true; // Enable stdin/stdout/stderr pipes
+    };
 
-public:
+    // Process API
+    int32 Create(const ProcessCreateInfo& info, ProcessHandle& hProcess);
+    int32 CloseHandle(ProcessHandle hProcess);
+    int32 Wait(ProcessHandle hProcess, uint32 timeoutMs, int32* outExitCode = nullptr);
+    int32 Terminate(ProcessHandle hProcess, int32 exitCode = -1);
+    int32 IsRunning(ProcessHandle hProcess, bool& outIsRunning);
+    int32 GetExitCode(ProcessHandle hProcess, int32& outExitCode);
+    uint64 GetCurrentProcessId();
+    uint64 GetProcessId(ProcessHandle hProcess);
+    int32 Suspend(ProcessHandle hProcess);
+    int32 Resume(ProcessHandle hProcess);
+    int32 ReadMemory(ProcessHandle hProcess, uptr remoteAddress, void* buffer, uint64 size, uint64* outBytesRead = nullptr);
+    int32 WriteMemory(ProcessHandle hProcess, uptr remoteAddress, const void* buffer, uint64 size, uint64* outBytesWritten = nullptr);
 
-	/// @brief Spawns a new process with the specified configuration.
-	/// @param info Structural parameters for launching the executable.
-	/// @param outProcess Reference to the process handle to be populated on success.
-	static iResult Create(const ProcessCreateInfo& info, ProcessHandle& outProcess);
+    // Stream I/O Operations
+    int32 ReadStdout(ProcessHandle hProcess, void* buffer, uint32 size, uint32* outBytesRead);
+    int32 ReadStderr(ProcessHandle hProcess, void* buffer, uint32 size, uint32* outBytesRead);
+    int32 WriteStdin(ProcessHandle hProcess, const void* data, uint32 size, uint32* outBytesWritten);
 
-	/// @brief Closes and releases the OS-level process handle resources.
-	/// @note This does NOT terminate the actual process if it is still running.
-	/// @param process The handle of the process to close.
-	static iResult CloseHandle(ProcessHandle process);
-
-	/// @brief Waits for a process to finish execution up to a specified timeout.
-	/// @param process The process handle.
-	/// @param timeoutMs Timeout in milliseconds (use UINT32_MAX for infinite wait).
-	/// @param outExitCode Optional pointer to receive the process exit code.
-	static iResult Wait(ProcessHandle process, uint32_t timeoutMs, int32_t* outExitCode = nullptr);
-
-	/// @brief Forcibly terminates a running process.
-	/// @param process The process handle.
-	/// @param exitCode Exit code to terminate the process with.
-	static iResult Terminate(ProcessHandle process, int32_t exitCode = -1);
-
-	/// @brief Checks whether the target process is still running.
-	/// @param process The process handle.
-	/// @param outIsRunning Reference to store true if running, false if finished.
-	static iResult IsRunning(ProcessHandle process, bool& outIsRunning);
-
-	/// @brief Retrieves the exit code of a finished process.
-	/// @param process The process handle.
-	/// @param outExitCode Reference to store the exit code.
-	static iResult GetExitCode(ProcessHandle process, int32_t& outExitCode);
-
-	/// @brief Gets the OS process ID for the calling process.
-	static uint64_t GetCurrentProcessId();
-
-	/// @brief Gets the OS process ID from a process handle.
-	/// @param process The process handle.
-	static uint64_t GetProcessId(ProcessHandle process);
-
-	/// @brief Freezes all threads in a target process.
-	static iResult Suspend(ProcessHandle process);
-
-	/// @brief Unfreezes a suspended target process.
-	static iResult Resume(ProcessHandle process);
-
-	/// @brief Reads raw bytes from the address space of a target process.
-	/// @param process Handle to the target process (must have read permissions).
-	/// @param remoteAddress Memory address inside the target process to read from.
-	/// @param buffer Local destination buffer to store the copied data.
-	/// @param size Number of bytes to read.
-	/// @param outBytesRead Optional pointer to receive actual bytes copied.
-	static iResult ReadMemory(ProcessHandle process, uintptr_t remoteAddress, void* buffer, uint64_t size, uint64_t* outBytesRead = nullptr);
-
-	/// @brief Writes raw bytes into the address space of a target process.
-	static iResult WriteMemory(ProcessHandle process, uintptr_t remoteAddress, const void* buffer, uint64_t size, uint64_t* outBytesWritten = nullptr);
-
-};
-
-
-
-DEFINE_HANDLE(SharedMemory); // SharedMemoryHandle
-
-struct PLATFORM_SHARED_MEMORY_API PlatformSharedMemory
-{
-	PlatformSharedMemory() = delete;
-
-public:
-
-	/// @brief Creates a shared memory region accessible by name.
-	/// @param name Unique string identifier across the OS (e.g., "Local\\MyGameBuffer").
-	/// @param size Size in bytes of the shared region.
-	/// @param outHandle Output handle.
-	/// @param outMappedPtr Output direct pointer to access the shared struct/buffer.
-	static iResult Create(const char* name, uint64_t size, SharedMemoryHandle& outHandle, void** outMappedPtr);
-
-	/// @brief Opens an existing shared memory region created by another process.
-	/// @param name Unique OS string identifier.
-	/// @param outHandle Output handle.
-	/// @param outMappedPtr Output pointer to the mapped memory.
-	/// @param size Bytes to map (Pass 0 to automatically map the ENTIRE region).
-	/// @param outSize Optional pointer to receive the actual size mapped by the OS.
-	static iResult Open(const char* name, SharedMemoryHandle& outHandle, void** outMappedPtr, uint64_t size = 0, uint64_t* outSize = nullptr);
-
-	/// @brief Unmaps and closes the shared memory.
-	static void Close(SharedMemoryHandle handle, void* mappedPtr);
-
-};
-
-*/
-
-
-
+    // Shared Memory API
+    int32 CreateSharedMemory(const char* name, uint64 size, SharedMemoryHandle& hSharedMemory, void** ppMappedPtr);
+    int32 OpenSharedMemory(const char* name, SharedMemoryHandle& hSharedMemory, void** ppMappedPtr, uint64 size = 0, uint64* outSize = nullptr);
+    void  CloseSharedMemory(SharedMemoryHandle hSharedMemory, void* pMappedPtr);
+}

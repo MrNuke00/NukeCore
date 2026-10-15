@@ -22,4 +22,6 @@ add_executable(PlatformNetworkTests "PlatformNetwork/main.cpp")
 target_link_libraries(PlatformNetworkTests PRIVATE NukeCore)
 add_test(NAME PlatformNetworkTests COMMAND PlatformNetworkTests)
 
-
+add_executable(PlatformProcessTests "PlatformProcess/main.cpp")
+target_link_libraries(PlatformProcessTests PRIVATE NukeCore)
+add_test(NAME PlatformProcessTests COMMAND PlatformProcessTests)
