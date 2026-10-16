@@ -22,3 +22,4 @@
 #undef MoveFile
 #undef CopyFile
 
+#include <xaudio2.h>
