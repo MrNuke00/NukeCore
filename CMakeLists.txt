@@ -1,11 +1,13 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿# NukeCore\CMakeLists.txt
+
+cmake_minimum_required (VERSION 3.20)
+
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
-
 
 project ("NukeCore"
 	VERSION 0.1.0
@@ -16,12 +18,13 @@ project ("NukeCore"
 include("cmake/Helpers.cmake")
 
 # ---- Options ----
-option(NUKECORE_BUILD_TESTS		"Build NukeCore tests"		ON)
+option(NUKECORE_BUILD_TESTS	"Build NukeCore tests" ON)
 
 # ---- Library ----
 NUKECORE_GET_CPP_SOURCES(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${CMAKE_CURRENT_SOURCE_DIR}/Platform
 )
 
 add_library(NukeCore STATIC ${SOURCES})
@@ -30,10 +33,45 @@ add_library(Nuke::Core ALIAS NukeCore)
 
 target_compile_features(NukeCore PUBLIC cxx_std_20)
 
+# --- Visibility settings ---
+set_target_properties(NukeCore PROPERTIES
+    C_VISIBILITY_PRESET			hidden
+    CXX_VISIBILITY_PRESET		hidden
+    VISIBILITY_INLINES_HIDDEN	ON
+)
+
+# --- Detect platform ---
+if(WIN32)
+    set(PLATFORM_NAME "Windows")
+    set(PLATFORM_DEFINE PLATFORM_WINDOWS=1)
+elseif(APPLE)
+    set(PLATFORM_NAME "Apple")
+    set(PLATFORM_DEFINE PLATFORM_APPLE=1)
+elseif(UNIX)
+    set(PLATFORM_NAME "Linux")
+    set(PLATFORM_DEFINE PLATFORM_LINUX=1)
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()
+
+target_compile_definitions(NukeCore
+    PUBLIC
+        PLATFORM_NAME="${PLATFORM_NAME}"
+        ${PLATFORM_DEFINE}
+)
+
 target_include_directories(NukeCore
 	PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-		$<INSTALL_INTERFACE:include>
+	# Include directories for consumers of the library
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+	# Platform-specific include directories
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Platform/${PLATFORM_NAME}/Public>
+        $<INSTALL_INTERFACE:Platform/${PLATFORM_NAME}/Public>
+	PRIVATE
+	# Include directories for building the library itself
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+		${CMAKE_CURRENT_SOURCE_DIR}/Platform/${PLATFORM_NAME}/Private
 )
 
 # Optional: warnings
