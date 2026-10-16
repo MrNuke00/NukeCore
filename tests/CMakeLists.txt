@@ -25,3 +25,15 @@ add_test(NAME PlatformNetworkTests COMMAND PlatformNetworkTests)
 add_executable(PlatformAudioTests "PlatformAudio/main.cpp")
 target_link_libraries(PlatformAudioTests PRIVATE NukeCore)
 add_test(NAME PlatformAudioTests COMMAND PlatformAudioTests)
+
+
+add_executable(PlatformSurfaceTests "PlatformSurface/main.cpp")
+target_link_libraries(PlatformSurfaceTests PRIVATE NukeCore)
+add_test(NAME PlatformSurfaceTests COMMAND PlatformSurfaceTests)
+
+
+
+add_executable(PlatformInputTests "PlatformInput/main.cpp")
+target_link_libraries(PlatformInputTests PRIVATE NukeCore)
+add_test(NAME PlatformInputTests COMMAND PlatformInputTests)
+

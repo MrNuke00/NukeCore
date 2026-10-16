@@ -8,7 +8,8 @@
 #define PATH(X)		WIDE_STR(X)
 
 
-
+//PlatformSurface
+#define PLATFORM_DISKTOP_MANAGER 1
 
 
 
