@@ -3,6 +3,29 @@
 #include <Platform/PlatformCoreMacro.h>
 #include <Platform/PlatformMacro.h>
 
+
+#if defined(NDEBUG)
+#define assert(expr) ((void)0)
+#else
+#define assert(expr) \
+		do { \
+			if (!(expr)) { \
+				DEBUG_BREAK(); \
+			} \
+		} while(false)
+#endif
+
+#define ensure(expr) \
+	[&]() { \
+		if (!static_cast<bool>(expr))\
+			{ DEBUG_BREAK(); };\
+		return expr;\
+	}()\
+
+
+
+
+
 #define DEFINE_HANDLE(NAME)										\
 	struct NAME##Handle {										\
 		void* ptr = nullptr;									\

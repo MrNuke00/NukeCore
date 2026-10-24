@@ -86,6 +86,13 @@ namespace Platform::Memory
 		std::memcpy(dest, src, static_cast<size_t>(size));
 	}
 
+	void Move(void* dest, const void* src, uint64 size)
+	{
+		if (size == 0) return;
+		// memmove safely handles overlapping source and destination memory regions
+		std::memmove(dest, src, static_cast<size_t>(size));
+	}
+
 	void Set(void* dest, uint32 value, uint64 size)
 	{
 		std::memset(dest, static_cast<int>(value), static_cast<size_t>(size));

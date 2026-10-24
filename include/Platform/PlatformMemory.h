@@ -18,7 +18,9 @@ namespace Platform::Memory
 
 	// Low-Level Memory Utilities (No-STL / High-Performance Intrinsics)
 	void    Copy(void* dest, const void* src, uint64 size);
+	void	Move(void* dest, const void* src, uint64 size);
 	void    Set(void* dest, uint32 value, uint64 size);
 	void    Zero(void* dest, uint64 size);
 	int32   Compare(const void* ptr1, const void* ptr2, uint64 size);
 };
+

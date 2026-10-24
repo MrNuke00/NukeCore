@@ -26,6 +26,13 @@
 #  error "PlatformCoreMacro.h requires a C++ compiler (C++17 or later)."
 #endif
 
+#if defined(NDEBUG)
+#	define BUILD_DEBUG		(0)
+#	define BUILD_RELEASE	(1)
+#else
+#	define BUILD_DEBUG		(1)
+#	define BUILD_RELEASE	(0)
+#endif
 
 // =============================================================================
 // 1. Platform detection
