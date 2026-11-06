@@ -1,3 +1,4 @@
+// NukeCore\include\Core\Array.h
 #pragma once
 #include <Core/Core.h>
 #include <Core/Memory.h>
@@ -5,6 +6,7 @@
 #include <initializer_list>
 #include <new>
 #include <assert.h>
+#include "HashTable.h"
 //required : { limit } 
 
 namespace NK::Core
@@ -46,6 +48,9 @@ namespace NK::Core
 		TSize m_capacity = 0;
 	};
 
+
+	
+
 	template<typename T, typename TAlloc = HeapAlloc<T>>
 	class Array : public TAlloc
 	{
@@ -56,6 +61,36 @@ namespace NK::Core
 
 		template<typename U, typename A>
 		friend class Array;
+
+	public:
+
+		class Iterator {
+		public:
+			using inner = typename V*;
+			Iterator() = default;
+			explicit Iterator(inner It) {}
+			decltype(auto) operator*()  const;
+			auto           operator->() const;
+			Iterator& operator++();
+			Iterator  operator++(int);
+			bool operator==(const Iterator& O) const;
+			bool operator!=(const Iterator& O) const;
+		};
+
+		class ConstIterator {
+		public:
+			using inner = typename V*;
+			ConstIterator() = default;
+			explicit ConstIterator(inner It);
+			ConstIterator(const Iterator<K, V>& It);
+			decltype(auto) operator*()  const;
+			auto           operator->() const;
+			ConstIterator& operator++();
+			ConstIterator  operator++(int);
+			bool operator==(const ConstIterator& O) const;
+			bool operator!=(const ConstIterator& O) const;
+		private:
+		};
 
 	private:
 		T*		m_data = nullptr;
@@ -225,13 +260,11 @@ namespace NK::Core
 		TSize	Num()	const { return m_size; }
 		TSize	Max()	const { return this->m_capacity; }
 		TSize	Slack()	const { return Max() - Num(); }
-		bool	Empty()	const { return m_size == 0; };
 
 		uint32 GetAllocatedSize() const { return Max() * (uint32)sizeof(T); }
 		TSize  GetTypeSize()      const { return (TSize)(sizeof(T) * m_size); }
 
 		bool IsValidIndex(TSize Idx) const { return (0 <= Idx)&&(Idx < m_size); }
-		bool IsEmpty() const { return m_size == 0; }
 
 	public :
 

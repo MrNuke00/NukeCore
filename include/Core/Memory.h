@@ -1,3 +1,4 @@
+// NukeCore\include\Core\Memory.h
 #pragma once
 #include <Core/Core.h>
 #include <Platform/PlatformMemory.h>

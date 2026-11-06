@@ -1,7 +1,6 @@
+// NukeCore\Platform\Windows\Public\Platform\PlatformMacro.h
 #pragma once
 #include <Platform/PlatformCoreMacro.h>
-
-
 
 //PlatformFile
 #define PATH_C_STR	const wchar*

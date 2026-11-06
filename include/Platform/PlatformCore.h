@@ -1,4 +1,4 @@
-// PlatformCore.h
+//NukeCore\include\Platform\PlatformCore.h
 #pragma once
 #include <Platform/PlatformCoreMacro.h>
 #include <Platform/PlatformMacro.h>
@@ -16,11 +16,13 @@
 #endif
 
 #define ensure(expr) \
-	[&]() { \
-		if (!static_cast<bool>(expr))\
-			{ DEBUG_BREAK(); };\
-		return expr;\
-	}()\
+    [&]() { \
+        auto&& _eval_result = (expr); \
+        if (!static_cast<bool>(_eval_result)) { \
+            DEBUG_BREAK(); \
+        } \
+        return _eval_result; \
+    }()
 
 
 

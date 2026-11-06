@@ -491,6 +491,17 @@
 
 #define UNUSED(x) ((void)(x))
 
+#if defined(COMPILER_MSVC) // MSVC requires the msvc:: namespace prefix
+#	define NO_UNIQUE [[msvc::no_unique_address]]
+#elif defined(__has_cpp_attribute)
+#	if __has_cpp_attribute(no_unique_address) // Standard C++20 attribute for GCC, Clang, etc.
+#		define NO_UNIQUE [[no_unique_address]]
+#	else
+#		define NO_UNIQUE
+#	endif
+#else // Fallback for very old compilers lacking __has_cpp_attribute
+#	define NO_UNIQUE
+#endif
 
 // =============================================================================
 // 14. Token-level helpers

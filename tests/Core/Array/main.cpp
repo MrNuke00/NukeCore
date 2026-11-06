@@ -61,7 +61,6 @@ void TestDefaultAndCapacity()
         Array<int> A;
         CHECK(A.Num() == 0);
         CHECK(A.Max() == 0);
-        CHECK(A.IsEmpty());
         CHECK(A.GetData() == nullptr);
         CHECK(A.Slack() == 0);
     }
@@ -69,7 +68,6 @@ void TestDefaultAndCapacity()
         Array<int> A(10);
         CHECK(A.Num() == 0);
         CHECK(A.Max() >= 10);
-        CHECK(A.IsEmpty());
         CHECK(A.Slack() >= 10);
     }
     {

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿// NukeCore\include\Platform\PlatformNetwork.h
+#pragma once
 #include <Platform/PlatformCore.h>
 
 namespace Platform::Network
